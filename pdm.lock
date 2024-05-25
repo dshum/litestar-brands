@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:6301077d68251ac5d71fcfd55ef7c280f2d20bcc691eeba044f3502f314a9e3e"
+content_hash = "sha256:785460425c53ed34fbcd56fbce565ff3de8adbdcff062aa6a2975283b3262e53"
 
 [[package]]
 name = "advanced-alchemy"
@@ -552,20 +552,6 @@ files = [
 ]
 
 [[package]]
-name = "litestar-vite"
-version = "0.1.22"
-requires_python = ">=3.8"
-summary = "Vite plugin for Litestar"
-groups = ["default"]
-dependencies = [
-    "litestar[jinja]>=2.4.0",
-]
-files = [
-    {file = "litestar_vite-0.1.22-py3-none-any.whl", hash = "sha256:d950a665d6c261c6ecb2b2be129077abca43e8e464f1a39fc74cad6cd70816ab"},
-    {file = "litestar_vite-0.1.22.tar.gz", hash = "sha256:7062a7b1ed25f60476dde0eb81ec076d14c958b4eff226f33c77b25f60929c70"},
-]
-
-[[package]]
 name = "litestar"
 version = "2.8.3"
 extras = ["cli", "jwt", "sqlalchemy"]
@@ -580,22 +566,6 @@ dependencies = [
     "python-jose",
     "uvicorn[standard]",
     "uvloop>=0.18.0; sys_platform != \"win32\"",
-]
-files = [
-    {file = "litestar-2.8.3-py3-none-any.whl", hash = "sha256:bef5e8592b1afba24306f9a5834d84cef89826b12f58a97d3099cf49e2f3767d"},
-    {file = "litestar-2.8.3.tar.gz", hash = "sha256:3764eef3885b331bfb15c478a2b9e2bc1980741ff58bd5512d599436f669549c"},
-]
-
-[[package]]
-name = "litestar"
-version = "2.8.3"
-extras = ["jinja"]
-requires_python = "<4.0,>=3.8"
-summary = "Litestar - A production-ready, highly performant, extensible ASGI API Framework"
-groups = ["default"]
-dependencies = [
-    "jinja2>=3.1.2",
-    "litestar==2.8.3",
 ]
 files = [
     {file = "litestar-2.8.3-py3-none-any.whl", hash = "sha256:bef5e8592b1afba24306f9a5834d84cef89826b12f58a97d3099cf49e2f3767d"},

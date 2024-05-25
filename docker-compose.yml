@@ -1,18 +1,43 @@
 services:
-  app:
-    container_name: brands
-    env_file: .env
+  reverse-proxy:
+    image: traefik:v3.0
+    container_name: brands-traefik
+    command: --api.insecure=true --providers.docker
+    ports:
+      - "8016:80"
+      - "10016:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  frontend:
+    container_name: brands-web
     build:
-      context: .
+      context: ./frontend
       dockerfile: Dockerfile
     volumes:
-      - ./src:/project/src
+      - ./frontend:/app
+      - /app/node_modules
+    labels:
+      traefik.http.routers.frontend.rule: Host(`localhost`) && PathPrefix(`/`)
+      traefik.http.services.frontend.loadbalancer.server.port: 5000
+    restart: unless-stopped
+    tty: true
+
+  backend:
+    container_name: brands-api
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    env_file: ./backend/.env
+    volumes:
+      - ./backend:/project/src
       - ./migrations:/project/migrations
     depends_on:
       - db
       - redis
-    ports:
-      - "${WEB_EXTERNAL_PORT:-8000}:8000"
+    labels:
+      traefik.http.routers.backend.rule: Host(`localhost`) && PathPrefix(`/api`)
+      traefik.http.services.backend.loadbalancer.server.port: 8000
     restart: unless-stopped
     tty: true
 

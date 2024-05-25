@@ -8,7 +8,6 @@ authors = [
 dependencies = [
     "litestar[jwt,picologging,pydantic,redis,sqlalchemy,standard]>=2.8.3",
     "pydantic-settings>=2.2.1",
-    "litestar-vite>=0.1.22",
     "litestar-users>=1.2.3",
     "asyncpg>=0.29.0",
     "black>=24.4.2",
