@@ -14,9 +14,6 @@ services:
     build:
       context: ./frontend
       dockerfile: prod.Dockerfile
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
     labels:
       traefik.http.routers.frontend.rule: Host(`localhost`) && PathPrefix(`/`)
       traefik.http.services.frontend.loadbalancer.server.port: 5000
