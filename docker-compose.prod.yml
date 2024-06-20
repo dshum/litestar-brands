@@ -3,25 +3,22 @@ services:
     image: traefik:v3.0
     container_name: brands-traefik-prod
     command:
-      --log.level=DEBUG
-      --log.filePath=/configuration/traefik.log
-      --api.dashboard=true
-      --api.insecure=true
-      --providers.docker=true
-      --providers.docker.exposedbydefault=false
-      --entrypoints.web.address=:80
-      --entrypoints.websecure.address=:443
-      --providers.file.directory=/configuration/
-      --providers.file.watch=true
-      --routers.rule.host='pffft.ru'
-      --routers.tls=true
+      - --providers.docker
+      - --providers.docker.exposedbydefault=false
+      - --log.level=DEBUG
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.web.address=:80
+      - --certificatesresolvers.letsencrypt.acme.email=denis-shumeev@yandex.ru
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
     ports:
       - "80:80"
       - "443:443"
       - "8080:8080"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /edata/certs/pffft.ru_2024/:/configuration/
+      - /var/run/docker.sock:/var/run/docker.sock
+      - traefik:/letsencrypt
 
   frontend:
     container_name: brands-web-prod
@@ -29,7 +26,7 @@ services:
       context: ./frontend
       dockerfile: prod.Dockerfile
     labels:
-      traefik.http.routers.frontend.rule: Host(`localhost`) && PathPrefix(`/`)
+      traefik.http.routers.frontend.rule: Host(`pffft.ru`) && PathPrefix(`/`)
       traefik.http.routers.frontend.tls.certresolver: letsencrypt
       traefik.http.services.frontend.loadbalancer.server.port: 5000
     restart: unless-stopped
@@ -45,8 +42,12 @@ services:
       - ./backend:/project/src
       - ./migrations:/project/migrations
     labels:
-      traefik.http.routers.backend.rule: Host(`localhost`) && PathPrefix(`/backend`)
+      traefik.http.routers.backend.rule: Host(`pffft.ru`) && PathPrefix(`/backend`)
       traefik.http.routers.backend.tls.certresolver: letsencrypt
+      traefik.http.routers.backend.service: backend
       traefik.http.services.backend.loadbalancer.server.port: 8000
     restart: unless-stopped
     tty: true
+
+volumes:
+  traefik:
