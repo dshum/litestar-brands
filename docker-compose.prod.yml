@@ -30,7 +30,7 @@ services:
       - ./backend:/project/src
       - ./migrations:/project/migrations
     labels:
-      traefik.http.routers.backend.rule: Host(`localhost`) && PathPrefix(`/api`)
+      traefik.http.routers.backend.rule: Host(`localhost`) && PathPrefix(`/backend`)
       traefik.http.services.backend.loadbalancer.server.port: 8000
     restart: unless-stopped
     tty: true
