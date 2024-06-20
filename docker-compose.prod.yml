@@ -17,6 +17,16 @@ services:
       - "80:80"
       - "443:443"
       - "8080:8080"
+    labels:
+      traefik.enable: true
+
+      # Dashboard
+      traefik.http.routers.reverse-proxy.rule: Host(`pffft.ru`)
+      traefik.http.routers.reverse-proxy.entrypoints: websecure
+      traefik.http.routers.reverse-proxy.service: api@internal
+      traefik.http.routers.reverse-proxy.tls: true
+      traefik.http.routers.reverse-proxy.tls.certresolver: le
+      traefik.http.routers.reverse-proxy.middlewares: dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - traefik:/letsencrypt
@@ -29,7 +39,7 @@ services:
     labels:
       traefik.http.routers.frontend.rule: Host(`pffft.ru`) && PathPrefix(`/`)
       traefik.http.routers.frontend.tls.certresolver: letsencrypt
-      traefik.http.services.frontend.loadbalancer.server.port: 80
+      traefik.http.services.frontend.loadbalancer.server.port: 5000
     restart: unless-stopped
     tty: true
 
@@ -45,8 +55,7 @@ services:
     labels:
       traefik.http.routers.backend.rule: Host(`pffft.ru`) && PathPrefix(`/backend`)
       traefik.http.routers.backend.tls.certresolver: letsencrypt
-      traefik.http.routers.backend.service: backend
-      traefik.http.services.backend.loadbalancer.server.port: 80
+      traefik.http.services.backend.loadbalancer.server.port: 8000
     restart: unless-stopped
     tty: true
 
