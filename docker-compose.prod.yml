@@ -4,8 +4,8 @@ services:
     container_name: brands-traefik-prod
     command: --api.insecure=true --providers.docker
     ports:
-      - "8017:80"
-      - "10017:8080"
+      - "80:80"
+      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
@@ -16,6 +16,7 @@ services:
       dockerfile: prod.Dockerfile
     labels:
       traefik.http.routers.frontend.rule: Host(`pffft.ru`) && PathPrefix(`/`)
+      traefik.http.routers.frontend.tls.certresolver: letsencrypt
       traefik.http.services.frontend.loadbalancer.server.port: 5000
     restart: unless-stopped
     tty: true
@@ -31,6 +32,7 @@ services:
       - ./migrations:/project/migrations
     labels:
       traefik.http.routers.backend.rule: Host(`pffft.ru`) && PathPrefix(`/backend`)
+      traefik.http.routers.backend.tls.certresolver: letsencrypt
       traefik.http.services.backend.loadbalancer.server.port: 8000
     restart: unless-stopped
     tty: true
