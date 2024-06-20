@@ -21,7 +21,7 @@ services:
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /edata/certs/traefik.domain.com_2022/:/configuration/
+      - /edata/certs/pffft.ru_2024/:/configuration/
 
   frontend:
     container_name: brands-web-prod
