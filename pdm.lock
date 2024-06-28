@@ -4,8 +4,8 @@
 [metadata]
 groups = ["default"]
 strategy = ["cross_platform", "inherit_metadata"]
-lock_version = "4.4.1"
-content_hash = "sha256:785460425c53ed34fbcd56fbce565ff3de8adbdcff062aa6a2975283b3262e53"
+lock_version = "4.4.2"
+content_hash = "sha256:0711ed0e8798dd975cf8c40e79bd2e18be0a43a694cab619795a9667ffcb495b"
 
 [[package]]
 name = "advanced-alchemy"
@@ -67,53 +67,6 @@ files = [
 ]
 
 [[package]]
-name = "argon2-cffi"
-version = "23.1.0"
-requires_python = ">=3.7"
-summary = "Argon2 for Python"
-groups = ["default"]
-dependencies = [
-    "argon2-cffi-bindings",
-]
-files = [
-    {file = "argon2_cffi-23.1.0-py3-none-any.whl", hash = "sha256:c670642b78ba29641818ab2e68bd4e6a78ba53b7eff7b4c3815ae16abf91c7ea"},
-    {file = "argon2_cffi-23.1.0.tar.gz", hash = "sha256:879c3e79a2729ce768ebb7d36d4609e3a78a4ca2ec3a9f12286ca057e3d0db08"},
-]
-
-[[package]]
-name = "argon2-cffi-bindings"
-version = "21.2.0"
-requires_python = ">=3.6"
-summary = "Low-level CFFI bindings for Argon2"
-groups = ["default"]
-dependencies = [
-    "cffi>=1.0.1",
-]
-files = [
-    {file = "argon2-cffi-bindings-21.2.0.tar.gz", hash = "sha256:bb89ceffa6c791807d1305ceb77dbfacc5aa499891d2c55661c6459651fc39e3"},
-    {file = "argon2_cffi_bindings-21.2.0-cp36-abi3-macosx_10_9_x86_64.whl", hash = "sha256:ccb949252cb2ab3a08c02024acb77cfb179492d5701c7cbdbfd776124d4d2367"},
-    {file = "argon2_cffi_bindings-21.2.0-cp36-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:9524464572e12979364b7d600abf96181d3541da11e23ddf565a32e70bd4dc0d"},
-    {file = "argon2_cffi_bindings-21.2.0-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b746dba803a79238e925d9046a63aa26bf86ab2a2fe74ce6b009a1c3f5c8f2ae"},
-    {file = "argon2_cffi_bindings-21.2.0-cp36-abi3-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:58ed19212051f49a523abb1dbe954337dc82d947fb6e5a0da60f7c8471a8476c"},
-    {file = "argon2_cffi_bindings-21.2.0-cp36-abi3-musllinux_1_1_aarch64.whl", hash = "sha256:bd46088725ef7f58b5a1ef7ca06647ebaf0eb4baff7d1d0d177c6cc8744abd86"},
-    {file = "argon2_cffi_bindings-21.2.0-cp36-abi3-musllinux_1_1_i686.whl", hash = "sha256:8cd69c07dd875537a824deec19f978e0f2078fdda07fd5c42ac29668dda5f40f"},
-    {file = "argon2_cffi_bindings-21.2.0-cp36-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:f1152ac548bd5b8bcecfb0b0371f082037e47128653df2e8ba6e914d384f3c3e"},
-    {file = "argon2_cffi_bindings-21.2.0-cp36-abi3-win32.whl", hash = "sha256:603ca0aba86b1349b147cab91ae970c63118a0f30444d4bc80355937c950c082"},
-    {file = "argon2_cffi_bindings-21.2.0-cp36-abi3-win_amd64.whl", hash = "sha256:b2ef1c30440dbbcba7a5dc3e319408b59676e2e039e2ae11a8775ecf482b192f"},
-    {file = "argon2_cffi_bindings-21.2.0-cp38-abi3-macosx_10_9_universal2.whl", hash = "sha256:e415e3f62c8d124ee16018e491a009937f8cf7ebf5eb430ffc5de21b900dad93"},
-    {file = "argon2_cffi_bindings-21.2.0-pp37-pypy37_pp73-macosx_10_9_x86_64.whl", hash = "sha256:3e385d1c39c520c08b53d63300c3ecc28622f076f4c2b0e6d7e796e9f6502194"},
-    {file = "argon2_cffi_bindings-21.2.0-pp37-pypy37_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:2c3e3cc67fdb7d82c4718f19b4e7a87123caf8a93fde7e23cf66ac0337d3cb3f"},
-    {file = "argon2_cffi_bindings-21.2.0-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6a22ad9800121b71099d0fb0a65323810a15f2e292f2ba450810a7316e128ee5"},
-    {file = "argon2_cffi_bindings-21.2.0-pp37-pypy37_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:f9f8b450ed0547e3d473fdc8612083fd08dd2120d6ac8f73828df9b7d45bb351"},
-    {file = "argon2_cffi_bindings-21.2.0-pp37-pypy37_pp73-win_amd64.whl", hash = "sha256:93f9bf70084f97245ba10ee36575f0c3f1e7d7724d67d8e5b08e61787c320ed7"},
-    {file = "argon2_cffi_bindings-21.2.0-pp38-pypy38_pp73-macosx_10_9_x86_64.whl", hash = "sha256:3b9ef65804859d335dc6b31582cad2c5166f0c3e7975f324d9ffaa34ee7e6583"},
-    {file = "argon2_cffi_bindings-21.2.0-pp38-pypy38_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d4966ef5848d820776f5f562a7d45fdd70c2f330c961d0d745b784034bd9f48d"},
-    {file = "argon2_cffi_bindings-21.2.0-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:20ef543a89dee4db46a1a6e206cd015360e5a75822f76df533845c3cbaf72670"},
-    {file = "argon2_cffi_bindings-21.2.0-pp38-pypy38_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:ed2937d286e2ad0cc79a7087d3c272832865f779430e0cc2b4f3718d3159b0cb"},
-    {file = "argon2_cffi_bindings-21.2.0-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:5e00316dabdaea0b2dd82d141cc66889ced0cdcbfa599e8b471cf22c620c329a"},
-]
-
-[[package]]
 name = "asyncpg"
 version = "0.29.0"
 requires_python = ">=3.8.0"
@@ -170,6 +123,7 @@ version = "1.16.0"
 requires_python = ">=3.8"
 summary = "Foreign Function Interface for Python calling C code."
 groups = ["default"]
+marker = "platform_python_implementation != \"PyPy\""
 dependencies = [
     "pycparser",
 ]
@@ -511,7 +465,7 @@ files = [
 
 [[package]]
 name = "litestar"
-version = "2.8.3"
+version = "2.9.1"
 requires_python = "<4.0,>=3.8"
 summary = "Litestar - A production-ready, highly performant, extensible ASGI API Framework"
 groups = ["default"]
@@ -528,65 +482,25 @@ dependencies = [
     "typing-extensions",
 ]
 files = [
-    {file = "litestar-2.8.3-py3-none-any.whl", hash = "sha256:bef5e8592b1afba24306f9a5834d84cef89826b12f58a97d3099cf49e2f3767d"},
-    {file = "litestar-2.8.3.tar.gz", hash = "sha256:3764eef3885b331bfb15c478a2b9e2bc1980741ff58bd5512d599436f669549c"},
-]
-
-[[package]]
-name = "litestar-users"
-version = "1.2.3"
-requires_python = "<4.0,>=3.8"
-summary = "Authentication and user management for Litestar"
-groups = ["default"]
-dependencies = [
-    "argon2-cffi",
-    "cryptography",
-    "litestar[cli,jwt,sqlalchemy]<3.0.0,>=2.1.1",
-    "passlib",
-    "python-jose",
-    "pyyaml!=5.4.*",
-]
-files = [
-    {file = "litestar_users-1.2.3-py3-none-any.whl", hash = "sha256:c13b61f2ba7d57e1b2955b34e72accb4dfd190f62ba32cfd49ef88fd51719612"},
-    {file = "litestar_users-1.2.3.tar.gz", hash = "sha256:b4d7bd067f7ff39c5e6ab779f6d2b52930724acfec60a4eaf1cecb32b00b376a"},
+    {file = "litestar-2.9.1-py3-none-any.whl", hash = "sha256:fe3e4ec91a9c24af652775fed5fa4d789902f165cabbd7d2e62821fec1f69462"},
+    {file = "litestar-2.9.1.tar.gz", hash = "sha256:7c13bb4dd7b1c77f6c462262cfe401ca6429eab3e4d98f38586b68268bd5ac97"},
 ]
 
 [[package]]
 name = "litestar"
-version = "2.8.3"
-extras = ["cli", "jwt", "sqlalchemy"]
-requires_python = "<4.0,>=3.8"
-summary = "Litestar - A production-ready, highly performant, extensible ASGI API Framework"
-groups = ["default"]
-dependencies = [
-    "advanced-alchemy<0.9.0,>=0.2.2",
-    "cryptography",
-    "jsbeautifier",
-    "litestar==2.8.3",
-    "python-jose",
-    "uvicorn[standard]",
-    "uvloop>=0.18.0; sys_platform != \"win32\"",
-]
-files = [
-    {file = "litestar-2.8.3-py3-none-any.whl", hash = "sha256:bef5e8592b1afba24306f9a5834d84cef89826b12f58a97d3099cf49e2f3767d"},
-    {file = "litestar-2.8.3.tar.gz", hash = "sha256:3764eef3885b331bfb15c478a2b9e2bc1980741ff58bd5512d599436f669549c"},
-]
-
-[[package]]
-name = "litestar"
-version = "2.8.3"
+version = "2.9.1"
 extras = ["jwt", "picologging", "pydantic", "redis", "sqlalchemy", "standard"]
 requires_python = "<4.0,>=3.8"
 summary = "Litestar - A production-ready, highly performant, extensible ASGI API Framework"
 groups = ["default"]
 dependencies = [
-    "advanced-alchemy<0.9.0,>=0.2.2",
+    "advanced-alchemy>=0.2.2",
     "cryptography",
     "email-validator",
     "fast-query-parsers>=1.0.2",
     "jinja2",
     "jsbeautifier",
-    "litestar==2.8.3",
+    "litestar==2.9.1",
     "picologging",
     "pydantic",
     "pydantic-extra-types",
@@ -596,8 +510,8 @@ dependencies = [
     "uvloop>=0.18.0; sys_platform != \"win32\"",
 ]
 files = [
-    {file = "litestar-2.8.3-py3-none-any.whl", hash = "sha256:bef5e8592b1afba24306f9a5834d84cef89826b12f58a97d3099cf49e2f3767d"},
-    {file = "litestar-2.8.3.tar.gz", hash = "sha256:3764eef3885b331bfb15c478a2b9e2bc1980741ff58bd5512d599436f669549c"},
+    {file = "litestar-2.9.1-py3-none-any.whl", hash = "sha256:fe3e4ec91a9c24af652775fed5fa4d789902f165cabbd7d2e62821fec1f69462"},
+    {file = "litestar-2.9.1.tar.gz", hash = "sha256:7c13bb4dd7b1c77f6c462262cfe401ca6429eab3e4d98f38586b68268bd5ac97"},
 ]
 
 [[package]]
@@ -725,16 +639,6 @@ files = [
 ]
 
 [[package]]
-name = "passlib"
-version = "1.7.4"
-summary = "comprehensive password hashing framework supporting over 30 schemes"
-groups = ["default"]
-files = [
-    {file = "passlib-1.7.4-py2.py3-none-any.whl", hash = "sha256:aa6bca462b8d8bda89c70b382f0c298a20b5560af6cbfa2dce410c0a2fb669f1"},
-    {file = "passlib-1.7.4.tar.gz", hash = "sha256:defd50f72b65c5402ab2c573830a6978e5f202ad0d984793c8dde2c4152ebe04"},
-]
-
-[[package]]
 name = "pathspec"
 version = "0.12.1"
 requires_python = ">=3.8"
@@ -805,6 +709,7 @@ version = "2.22"
 requires_python = ">=3.8"
 summary = "C parser in Python"
 groups = ["default"]
+marker = "platform_python_implementation != \"PyPy\""
 files = [
     {file = "pycparser-2.22-py3-none-any.whl", hash = "sha256:c3702b6d3dd8c7abc1afa565d7e63d53a1d0bd86cdc24edd75470f4de499cfcc"},
     {file = "pycparser-2.22.tar.gz", hash = "sha256:491c8be9c040f5390f5bf44a5b07752bd07f56edf992381b05c701439eec10f6"},
@@ -884,17 +789,17 @@ files = [
 
 [[package]]
 name = "pydantic-settings"
-version = "2.2.1"
+version = "2.3.4"
 requires_python = ">=3.8"
 summary = "Settings management using Pydantic"
 groups = ["default"]
 dependencies = [
-    "pydantic>=2.3.0",
+    "pydantic>=2.7.0",
     "python-dotenv>=0.21.0",
 ]
 files = [
-    {file = "pydantic_settings-2.2.1-py3-none-any.whl", hash = "sha256:0235391d26db4d2190cb9b31051c4b46882d28a51533f97440867f012d4da091"},
-    {file = "pydantic_settings-2.2.1.tar.gz", hash = "sha256:00b9f6a5e95553590434c0fa01ead0b216c3e10bc54ae02e37f359948643c5ed"},
+    {file = "pydantic_settings-2.3.4-py3-none-any.whl", hash = "sha256:11ad8bacb68a045f00e4f862c7a718c8a9ec766aa8fd4c32e39a0594b207b53a"},
+    {file = "pydantic_settings-2.3.4.tar.gz", hash = "sha256:c5802e3d62b78e82522319bbc9b8f8ffb28ad1c988a99311d04f2a6051fca0a7"},
 ]
 
 [[package]]

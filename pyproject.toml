@@ -3,18 +3,17 @@ name = "litestar-brands"
 version = "0.1.0"
 description = "Default template for PDM package"
 authors = [
-    {name = "Denis Shumeev", email = "denis-shumeev@yandex.ru"},
+    { name = "Denis Shumeev", email = "denis-shumeev@yandex.ru" },
 ]
 dependencies = [
-    "litestar[jwt,picologging,pydantic,redis,sqlalchemy,standard]>=2.8.3",
-    "pydantic-settings>=2.2.1",
-    "litestar-users>=1.2.3",
+    "litestar[jwt,picologging,pydantic,redis,sqlalchemy,standard]>=2.9.1",
+    "pydantic-settings>=2.3.4",
     "asyncpg>=0.29.0",
     "black>=24.4.2",
 ]
 requires-python = "==3.12.*"
 readme = "README.md"
-license = {text = "MIT"}
+license = { text = "MIT" }
 
 
 [tool.pdm]
