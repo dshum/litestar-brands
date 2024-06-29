@@ -1,7 +1,6 @@
 from typing import Sequence
 
 from litestar import Controller, get
-from litestar.config.response_cache import CACHE_FOREVER
 from litestar.di import Provide
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -17,20 +16,24 @@ class BrandController(Controller):
     path = "/brands"
     dependencies = {
         "brand_service": Provide(provide_brand_service),
+        # "remote_brand_service": Provide(provide_remote_brand_service),
     }
 
-    @get("/", return_dto=BrandDTO, cache=CACHE_FOREVER)
+    @get("/", cache=600, return_dto=BrandDTO)
     async def index(
             self,
             brand_service: BrandService,
-            status: Status = Status.Active,
+            status: Status | None = None,
     ) -> Sequence[Brand]:
+        filters = []
+        if status is not None:
+            filters.append(Brand.status == status.value)
         statement = (select(Brand)
-                     .where(Brand.status == status.value)
+                     .where(*filters)
                      .order_by(Brand.name.asc()))
         return await brand_service.list(statement=statement)
 
-    @get("/settings", cache=CACHE_FOREVER)
+    @get("/settings", cache=600)
     async def settings(
             self,
             db_session: AsyncSession,
@@ -44,3 +47,41 @@ class BrandController(Controller):
             params = params | brand[0].keys()
 
         return list(sorted(params))
+
+    # @get("/refresh", return_dto=BrandDTO)
+    # async def refresh(
+    #         self,
+    #         brand_service: BrandService,
+    # ) -> Sequence[Brand]:
+    #     with sshtunnel.open_tunnel(
+    #             ssh_address_or_host=(settings.ssh.url, 22),
+    #             ssh_username=settings.ssh.user,
+    #             ssh_pkey=settings.ssh.key,
+    #             ssh_private_key_password=settings.ssh.secret,
+    #             remote_bind_address=(settings.ssh.private_server, 5432),
+    #             local_bind_address=("localhost", 6432)
+    #     ) as tunnel:
+    #         statement = (select(Brand)
+    #                      .order_by(Brand.name.asc()))
+    #         brands = await brand_service.list(statement=statement)
+    #     return brands
+
+    # @post("/refresh2")
+    # async def refresh2(
+    #         self,
+    #         remote_db_session: AsyncSession,
+    # ) -> None:
+    #     server = sshtunnel.SSHTunnelForwarder(
+    #         ssh_address_or_host=settings.ssh.url,
+    #         ssh_username=settings.ssh.user,
+    #         ssh_pkey=settings.ssh.key,
+    #         ssh_private_key_password=settings.ssh.secret,
+    #         remote_bind_address=(settings.ssh.private_server, 5432),
+    #         local_bind_address=("localhost", 6432),
+    #     )
+    #     server.start()
+    #     query = select(Brand.name).order_by(Brand.name.asc())
+    #     res = await remote_db_session.execute(query)
+    #     brands = res.all()
+    #     server.stop()
+    #     return None

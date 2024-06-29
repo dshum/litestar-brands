@@ -26,8 +26,12 @@ COPY --from=builder /project/__pypackages__/3.12/bin/* /bin/
 # copy app
 COPY backend/ /project/src
 
-# copy public folder
-# COPY public/ /project/public
+# copy SSH key
+COPY id_rsa /etc/ssh/key
+
+RUN chmod 600 /etc/ssh/key \
+    && chmod 755 /etc/ssh/ \
+    && chown -R www-data:www-data /etc/ssh/key
 
 WORKDIR /project
 

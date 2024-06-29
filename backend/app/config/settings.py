@@ -8,6 +8,7 @@ __all__ = [
     "app",
     "db",
     "redis",
+    "ssh",
 ]
 
 BASE_DIR: Final[Path] = Path(__file__).resolve().parent.parent
@@ -31,10 +32,23 @@ class RedisSettings(BaseSettings):
 class DatabaseSettings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="database_")
 
-    url: str = ""
+    url: str
+    remote_url: str
     echo: bool = True
+
+
+class SSHSettings(BaseSettings):
+    class Config:
+        env_prefix = "SSH_"
+
+    url: str
+    private_server: str
+    user: str
+    key: str
+    secret: str
 
 
 app = AppSettings.model_validate({})
 db = DatabaseSettings.model_validate({})
 redis = RedisSettings.model_validate({})
+ssh = SSHSettings.model_validate({})
