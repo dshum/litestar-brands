@@ -1,7 +1,7 @@
 import enum
 
 from advanced_alchemy.base import AuditColumns, CommonTableAttributes
-from sqlalchemy import Text, String
+from sqlalchemy import Text, String, cast
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import mapped_column, Mapped, column_property
 
@@ -22,4 +22,4 @@ class Brand(CommonTableAttributes, AuditColumns, Base):
     hosts: Mapped[str] = mapped_column(Text)
     status: Mapped[Status] = mapped_column(String(255))
     db_name: Mapped[str] = mapped_column(String(255))
-    params: Mapped[dict] = column_property(settings["settings"].label("params"))
+    params: Mapped[dict] = column_property(cast(settings, JSONB)["settings"].label("params"))

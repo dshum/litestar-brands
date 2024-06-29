@@ -2,6 +2,7 @@ from advanced_alchemy import AsyncSessionConfig
 from advanced_alchemy.config import EngineConfig
 from advanced_alchemy.extensions.litestar.plugins.init.config.asyncio import autocommit_before_send_handler
 from litestar.contrib.sqlalchemy.plugins import SQLAlchemyAsyncConfig
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import declarative_base
 
 from app.config import settings
@@ -32,5 +33,5 @@ sqlalchemy_config = SQLAlchemyAsyncConfig(
 #     session_dependency_key="remote_db_session",
 # )
 
-# remote_engine = create_async_engine(url=settings.db.remote_url)
-# remote_async_session = async_sessionmaker(remote_engine, expire_on_commit=False)
+remote_engine = create_async_engine(url=settings.db.remote_url, pool_pre_ping=True)
+remote_async_session = async_sessionmaker(remote_engine, expire_on_commit=False)
