@@ -5,4 +5,4 @@ from app.db.models import Brand
 
 
 class BrandDTO(SQLAlchemyDTO[Brand]):
-    config = DTOConfig(include={"name", "hosts", "status", "db_name"})
+    config = DTOConfig(exclude={"settings"})

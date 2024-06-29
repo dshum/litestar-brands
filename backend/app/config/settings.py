@@ -7,6 +7,7 @@ __all__ = [
     "BASE_DIR",
     "app",
     "db",
+    "redis",
 ]
 
 BASE_DIR: Final[Path] = Path(__file__).resolve().parent.parent
@@ -20,6 +21,13 @@ class AppSettings(BaseSettings):
     debug: bool = True
 
 
+class RedisSettings(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="redis_")
+
+    location: str = "redis://localhost:6379/1"
+    namespace: str = "BRANDS"
+
+
 class DatabaseSettings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="database_")
 
@@ -29,3 +37,4 @@ class DatabaseSettings(BaseSettings):
 
 app = AppSettings.model_validate({})
 db = DatabaseSettings.model_validate({})
+redis = RedisSettings.model_validate({})
