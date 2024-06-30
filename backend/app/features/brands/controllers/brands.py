@@ -1,19 +1,20 @@
 from typing import Sequence
 
-from litestar import Controller, get
+from litestar import Controller, get, post
 from litestar.di import Provide
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.models import Brand
 from app.db.models.brand import Status
+from app.db.models.remote_brand import RemoteBrand
 from app.features.brands.dependencies import (
     provide_brand_service,
     provide_remote_db_session,
     provide_remote_brand_service,
 )
 from app.features.brands.dtos import BrandDTO
-from app.features.brands.services import BrandService
+from app.features.brands.services import BrandService, RemoteBrandService
 
 
 class BrandController(Controller):
@@ -43,7 +44,7 @@ class BrandController(Controller):
             self,
             db_session: AsyncSession,
     ) -> list[str]:
-        query = select(Brand.settings["settings"])
+        query = select(Brand.settings)
         res = await db_session.execute(query)
         brands = res.all()
 
@@ -53,11 +54,14 @@ class BrandController(Controller):
 
         return list(sorted(params))
 
-    @get("/refresh", return_dto=BrandDTO)
+    @post("/refresh", return_dto=BrandDTO)
     async def refresh(
             self,
-            remote_brand_service: BrandService,
-    ) -> Sequence[Brand]:
-        statement = (select(Brand)
-                     .order_by(Brand.name.asc()))
-        return await remote_brand_service.list(statement=statement)
+            remote_brand_service: RemoteBrandService,
+            brand_service: BrandService,
+    ) -> list[Brand]:
+        statement = (select(RemoteBrand)
+                     .order_by(RemoteBrand.name.asc()))
+        remote_brands = await remote_brand_service.list(statement=statement)
+        data = [brand.to_dict() for brand in remote_brands]
+        return await brand_service.upsert_many(data=data, match_fields=["name"])
