@@ -5,7 +5,7 @@ from sqlalchemy import Text, String
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import mapped_column, Mapped
 
-from app.config.sqlalchemy import DefaultBase
+from app.config.sqlalchemy import TestRemoteBase
 
 
 class Status(Enum):
@@ -14,8 +14,8 @@ class Status(Enum):
     Dead = "Dead"
 
 
-class Brand(CommonTableAttributes, AuditColumns, DefaultBase):
-    __tablename__ = "brands"
+class TestBrand(CommonTableAttributes, AuditColumns, TestRemoteBase):
+    __tablename__ = "test_brands"
 
     name: Mapped[str] = mapped_column(String(255), primary_key=True)
     settings: Mapped[dict] = mapped_column(JSONB)

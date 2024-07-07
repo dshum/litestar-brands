@@ -6,11 +6,12 @@ authors = [
     { name = "Denis Shumeev", email = "denis-shumeev@yandex.ru" },
 ]
 dependencies = [
-    "litestar[jwt,picologging,pydantic,redis,sqlalchemy,standard]>=2.9.1",
+    "litestar[jwt,picologging,pydantic,redis,standard]>=2.9.1",
     "pydantic-settings>=2.3.4",
     "asyncpg>=0.29.0",
     "black>=24.4.2",
     "sshtunnel>=0.4.0",
+    "advanced-alchemy>=0.17.1",
 ]
 requires-python = "==3.12.*"
 readme = "README.md"

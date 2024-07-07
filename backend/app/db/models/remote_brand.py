@@ -3,11 +3,11 @@ from sqlalchemy import String, Text, cast
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, column_property
 
-from app.config.sqlalchemy import RemoteBase
+from app.config.remote_sqlalchemy import RemoteBase
 
 
 class RemoteBrand(CommonTableAttributes, AuditColumns, RemoteBase):
-    __tablename__ = 'brands'
+    __tablename__ = "brands"
 
     name: Mapped[str] = mapped_column(String(255), primary_key=True)
     _settings: Mapped[dict] = mapped_column("settings", JSONB, deferred=True)
