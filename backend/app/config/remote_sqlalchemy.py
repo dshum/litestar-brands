@@ -18,7 +18,9 @@ class RemoteUUIDAuditBase(CommonTableAttributes, AuditColumns, DeclarativeBase):
 
 class RemoteSQLAlchemyAsyncConfig(SQLAlchemyAsyncConfig):
     def provide_session(self, state: State, scope: Scope) -> AsyncSession:
+        print("provide_session")
         if not server.is_alive:
+            print("server not alive")
             server.start()
             print("Remote server connected")
         return super().provide_session(state, scope)
