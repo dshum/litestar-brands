@@ -1,7 +1,7 @@
 from typing import Sequence
 from uuid import UUID
 
-from advanced_alchemy.base import UUIDAuditBase
+from advanced_alchemy.base import create_registry, CommonTableAttributes, UUIDPrimaryKey, AuditColumns, UUIDAuditBase
 from advanced_alchemy.config import EngineConfig, AsyncSessionConfig
 from advanced_alchemy.extensions.litestar import SQLAlchemyPlugin
 from advanced_alchemy.repository import SQLAlchemyAsyncRepository
@@ -10,31 +10,40 @@ from litestar import Litestar, get
 from litestar.contrib.sqlalchemy.plugins import SQLAlchemyAsyncConfig
 from litestar.di import Provide
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import Mapped, DeclarativeBase
 
 ########## Database ##########
 
-DEFAULT_DATABASE_URL = "postgresql+asyncpg://postgres:password@localhost:5432/default_db"
-STATISTICS_DATABASE_URL = "postgresql+asyncpg://postgres:password@localhost:5432/statistics_db"
+DEFAULT_DATABASE_URL = "postgresql+asyncpg://postgres:password@localhost:8116/brands"
+STATISTICS_DATABASE_URL = "postgresql+asyncpg://postgres:password@localhost:8116/remote_brands"
+
+stat_registry = create_registry()
+
+
+class StatUUIDAuditBase(CommonTableAttributes, UUIDPrimaryKey, AuditColumns, DeclarativeBase):
+    registry = stat_registry
+
 
 sqlalchemy_config = SQLAlchemyAsyncConfig(
     connection_string=DEFAULT_DATABASE_URL,
-    metadata=UUIDAuditBase.metadata,
+    metadata=UUIDAuditBase.registry.metadata,
     session_config=AsyncSessionConfig(expire_on_commit=False),
     engine_config=EngineConfig(echo=True),
     before_send_handler="autocommit",
-    # create_all=True,
+    create_all=True,
 )
 
 stat_sqlalchemy_config = SQLAlchemyAsyncConfig(
     connection_string=STATISTICS_DATABASE_URL,
-    metadata=UUIDAuditBase.metadata,
+    metadata=stat_registry.metadata,
     session_config=AsyncSessionConfig(expire_on_commit=False),
     engine_config=EngineConfig(echo=True),
     before_send_handler="autocommit",
     session_dependency_key="stat_db_session",
     engine_dependency_key="stat_db_engine",
-    # create_all=True,
+    session_maker_app_state_key="stat_session_maker_class",
+    engine_app_state_key="stat_db_engine",
+    create_all=True,
 )
 
 sqlalchemy_plugin = SQLAlchemyPlugin(config=[sqlalchemy_config, stat_sqlalchemy_config])
@@ -56,7 +65,7 @@ class PersonService(SQLAlchemyAsyncRepositoryService[Person]):
     repository_type = PersonRepository
 
 
-class Statistics(UUIDAuditBase):
+class Statistics(StatUUIDAuditBase):
     __tablename__ = "statistics"
 
     person_id: Mapped[UUID]

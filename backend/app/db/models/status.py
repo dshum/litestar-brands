@@ -2,6 +2,6 @@ from enum import Enum
 
 
 class Status(Enum):
-    ACTIVE = "Active"
-    CLOSED = "Closed"
-    DEAD = "Dead"
+    Active = "Active"
+    Closed = "Closed"
+    Dead = "Dead"

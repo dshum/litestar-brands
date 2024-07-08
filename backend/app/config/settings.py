@@ -35,7 +35,7 @@ class DatabaseSettings(BaseSettings):
     url: str
     remote_url: str
     test_remote_url: str
-    echo: bool = True
+    echo: bool = False
 
 
 class SSHSettings(BaseSettings):
