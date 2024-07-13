@@ -33,6 +33,6 @@ remote_sqlalchemy_config = RemoteSQLAlchemyAsyncConfig(
     engine_config=EngineConfig(echo=settings.db.echo),
     session_dependency_key="remote_db_session",
     engine_dependency_key="remote_db_engine",
-    session_maker_app_state_key="remote_session_maker_class",
-    engine_app_state_key="remote_db_engine",
+    # session_maker_app_state_key="remote_session_maker_class",
+    # engine_app_state_key="remote_db_engine",
 )
