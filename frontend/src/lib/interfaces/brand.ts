@@ -1,7 +1,12 @@
-import {Status} from "./status"
+import Status from "./status"
 
-export type Brand = {
+type Brand = {
   name: string
   hosts: string
-  status: Status
+  status: Status,
+  db_name: string,
+  created_at: string,
+  settings: { [key: string]: string | number | object | never; },
 }
+
+export default Brand

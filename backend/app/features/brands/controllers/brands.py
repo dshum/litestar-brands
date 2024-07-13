@@ -2,6 +2,7 @@ from typing import Sequence
 
 from litestar import Controller, get, post
 from litestar.di import Provide
+from litestar.params import Parameter
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -25,7 +26,7 @@ class BrandController(Controller):
     }
 
     @get("/", return_dto=BrandDTO, cache=3600)
-    async def index(
+    async def get_brands(
             self,
             brand_service: BrandService,
             status: Status | None = None,
@@ -38,8 +39,16 @@ class BrandController(Controller):
                      .order_by(Brand.name.asc()))
         return await brand_service.list(statement=statement)
 
+    @get("/{name:str}", return_dto=BrandDTO, cache=3600)
+    async def get_brand(
+            self,
+            brand_service: BrandService,
+            name: str = Parameter(title="Brand name")
+    ) -> Brand:
+        return await brand_service.get(name)
+
     @get("/settings", cache=3600)
-    async def settings(
+    async def get_settings(
             self,
             db_session: AsyncSession,
     ) -> list[str]:

@@ -1,8 +1,8 @@
 import {json, type RequestHandler} from "@sveltejs/kit"
 import {API_URL} from "$env/static/private"
 
-export const GET: RequestHandler = async ({setHeaders}) => {
-  const URL = `${API_URL}/brands`
+export const GET: RequestHandler = async ({params, setHeaders}) => {
+  const URL = `${API_URL}/brands/${params.name}`
 
   const response = await fetch(URL)
   const data = await response.json()
