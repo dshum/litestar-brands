@@ -1,6 +1,6 @@
 <script lang="ts">
   import type {PageData} from "./$types"
-  import type Brand from "$lib/interfaces/brand"
+  import type Brand from "$lib/types/brand"
 
   export let data: PageData
 

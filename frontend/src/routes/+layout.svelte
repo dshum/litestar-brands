@@ -12,7 +12,7 @@
 
 <div class="flex flex-col min-h-screen">
   <div class="flex flex-col flex-grow">
-    <main class="lg:container px-4 xl:px-0 my-6">
+    <main class="lg:container px-4 xl:px-0">
       <slot/>
     </main>
   </div>

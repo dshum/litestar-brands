@@ -4,23 +4,26 @@
   import Hosts from "$lib/components/Hosts.svelte"
   import Status from "$lib/components/Status.svelte"
   import ExtraParams from "$lib/components/ExtraParams.svelte"
-  import type Brand from "$lib/interfaces/brand"
-  import BrandStatus from "$lib/interfaces/status"
+  import type {Brand} from "$lib/types/brand"
+  import {Status as BrandStatus} from "$lib/types/status"
+  import {Version} from "$lib/types/version"
 
   export let data: PageData
 
-
-  const statuses = Object.values(BrandStatus)
-  const brands: Brand[] = data.brands
+  const statuses = Object.entries(BrandStatus)
+  const versions = Object.entries(Version)
 
   let selectedStatus: string = ""
+  let selectedVersion: string = ""
   let selectedParam: string = ""
   let selectedParams: string[] = []
   let removeParam: string = ""
   let search: string = ""
 
-  $: filteredBrands = brands.filter((brand: Brand) => {
+  $: filteredBrands = data.brands.filter((brand: Brand) => {
     return selectedStatus ? brand.status === selectedStatus : true
+  }).filter((brand: Brand) => {
+    return selectedVersion ? brand.hosts.includes(selectedVersion + ".") : true
   }).filter((brand: Brand) => {
     return search.trim() === ""
       || brand.name.toLowerCase().includes(search.trim().toLowerCase())
@@ -44,8 +47,17 @@
     }
   }
 
-  const removeParamHandler = (event: CustomEvent) => {
+  const onRemoveParam = (event: CustomEvent) => {
     removeParam = event.detail
+  }
+
+  const onRefresh = async (event) => {
+    const button = event.target
+    button.disabled = true
+    button.textContent = "Refreshing..."
+    await fetch("/api/brands/refresh", {method: "POST"})
+    button.textContent = "Complete"
+    button.disabled = false
   }
 </script>
 
@@ -53,13 +65,23 @@
   <title>Brands</title>
 </svelte:head>
 
-<div class="my-6 flex flex-row flex-wrap lg:flex-nowrap justify-between items-center gap-4">
-  <div class="min-w-72 w-full md:w-auto">
+<div class="my-6 flex flex-row flex-wrap xl:flex-nowrap justify-between items-center gap-4">
+  <div class="min-w-36 w-full md:w-auto">
     <select bind:value={selectedStatus}
             class="w-full py-2 px-4 rounded-xl shadow-lg border-none outline-0 bg-white">
       <option value="">All statuses</option>
       {#each statuses as status}
-        <option class="max-w-sm" value="{status}">{status}</option>
+        <option class="max-w-sm" value="{status[0]}">{status[1]}</option>
+      {/each}
+    </select>
+  </div>
+
+  <div class="min-w-36 w-full md:w-auto">
+    <select bind:value={selectedVersion}
+            class="w-full py-2 px-4 rounded-xl shadow-lg border-none outline-0 bg-white">
+      <option value="">All versions</option>
+      {#each versions as version}
+        <option class="max-w-sm" value="{version[0]}">{version[1]}</option>
       {/each}
     </select>
   </div>
@@ -79,6 +101,20 @@
         <option value="{param}">{param}</option>
       {/each}
     </select>
+  </div>
+
+  <div class="flex flex-row gap-4">
+    <button on:click={onRefresh}
+            class="py-2 px-4 rounded-xl shadow-lg bg-white text-blue-500 whitespace-nowrap">
+      Refresh
+    </button>
+
+    <form action="/logout" method="POST">
+      <button
+          class="py-2 px-4 rounded-xl shadow-lg bg-white text-blue-500 whitespace-nowrap">Log
+        out
+      </button>
+    </form>
   </div>
 </div>
 
@@ -110,7 +146,7 @@
             <td class="p-2 break-all">
               <ExtraParams
                   bind:params={selectedParams} bind:settings={brand.settings}
-                  on:remove-param={removeParamHandler}
+                  on:remove-param={onRemoveParam}
               />
             </td>
           {/if}

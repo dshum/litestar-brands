@@ -1,6 +1,6 @@
 import type {PageLoad} from "./$types"
 
-export const load: PageLoad = async ({fetch}) => {
+export const load: PageLoad = async ({cookies, fetch}) => {
   const getBrands = async () => {
     const response: Response = await fetch("/api/brands")
     return await response.json()
@@ -10,6 +10,8 @@ export const load: PageLoad = async ({fetch}) => {
     const response: Response = await fetch("/api/brands/settings")
     return await response.json()
   }
+
+  // console.log(cookies.get)
 
   return {
     brands: await getBrands(),
