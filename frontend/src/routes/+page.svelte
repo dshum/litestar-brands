@@ -134,7 +134,7 @@
     {#if filteredBrands.length}
       {#each filteredBrands as brand (brand.name)}
         <tr data-brand-name={brand.name} class="bg-white even:bg-slate-100">
-          <td class="p-2"><a href="/{brand.name}" class="underline">{brand.name}</a></td>
+          <td class="p-2"><a href="/{brand.name}" target="_blank" class="underline">{brand.name}</a></td>
           <td class="p-2 text-wrap">
             <Hosts bind:hosts={brand.hosts}/>
           </td>
