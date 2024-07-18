@@ -1,39 +1,43 @@
 <script lang="ts">
-  import type {ActionData} from "./$types"
+	import type { ActionData } from "./$types"
 
-  export let form: ActionData
+	export let form: ActionData
 </script>
 
-<div class="flex flex-row justify-center">
-  <div class="flex flex-col min-w-72 min-h-screen justify-center gap-4">
-    {#if form?.missing}
-      <p class="error">The email field is required</p>
-    {/if}
+<div class="my-6 flex flex-row justify-center m-auto">
+	<div class="flex flex-col min-w-72 justify-center gap-4">
+		<h1 class="h1">Log in</h1>
 
-    {#if form?.incorrect}
-      <p class="error">Invalid credentials!</p>
-    {/if}
+		{#if form?.missing}
+			<p class="error">The email field is required</p>
+		{/if}
 
-    <div class="rounded-xl shadow-xl bg-white p-4">
-      <form method="POST">
-        <div class="flex flex-col gap-4">
-          <label>
-            <div>Email</div>
-            <div><input name="email" type="email" value={form?.email ?? ""}></div>
-          </label>
+		{#if form?.incorrect}
+			<p class="error">Invalid credentials!</p>
+		{/if}
 
-          <label>
-            <div>Password</div>
-            <div><input name="password" type="password"></div>
-          </label>
+		<form method="POST">
+			<div class="flex flex-col gap-4">
+				<label class="label">
+					<span>Email</span>
+					<input name="email" type="email" value={form?.email ?? ""} class="input"
+								 autocomplete="on"
+					>
+				</label>
 
-          <div>
-            <button>Log in</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
+				<label class="label">
+					<span>Password</span>
+					<input name="password" type="password" class="input"
+								 autocomplete="current-password"
+					>
+				</label>
+
+				<label>
+					<button>Log in</button>
+				</label>
+			</div>
+		</form>
+	</div>
 </div>
 
 <style lang="postcss">
@@ -42,10 +46,10 @@
     }
 
     button {
-        @apply w-full rounded-lg shadow-lg bg-blue-600 text-white py-2 px-8;
+        @apply w-full rounded-lg shadow-lg bg-primary-500 text-white py-2 px-8;
     }
 
     p.error {
-        @apply w-full rounded-lg bg-red-500 text-white py-2 px-4;
+        @apply w-full rounded-lg bg-error-500 text-white py-2 px-4;
     }
 </style>
