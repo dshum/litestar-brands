@@ -8,8 +8,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config.stores import redis_store
 from app.db.models import Brand
-from app.db.models.brand import Status
 from app.db.models.remote_brand import RemoteBrand
+from app.db.models.status import Status
 from app.features.brands.dependencies import (
     provide_brand_service,
     provide_remote_brand_service,
@@ -56,7 +56,7 @@ class BrandController(Controller):
         res = await db_session.execute(query)
         brands = res.all()
 
-        params = []
+        params: list[str] = []
         for brand in brands:
             params = params | brand[0].keys()
 
@@ -67,14 +67,14 @@ class BrandController(Controller):
             self,
             remote_brand_service: RemoteBrandService,
             brand_service: BrandService,
-    ) -> Sequence[Brand]:
+    ) -> dict[str, str]:
         statement = (select(RemoteBrand)
                      .order_by(RemoteBrand.name.asc()))
         remote_brands = await remote_brand_service.list(statement=statement)
         data = [brand.to_dict() for brand in remote_brands]
-        result = await brand_service.upsert_many(data=data, match_fields=["name"])
+        await brand_service.upsert_many(data=data, match_fields=["name"])
         await redis_store.delete_all()
-        return result
+        return {"result": "refreshed"}
 
     @get("/remote", return_dto=RemoteBrandDTO)
     async def remote(

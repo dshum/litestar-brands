@@ -1,5 +1,6 @@
 from advanced_alchemy.base import create_registry, CommonTableAttributes, AuditColumns
-from advanced_alchemy.config import EngineConfig, AsyncSessionConfig
+from advanced_alchemy.config import AsyncSessionConfig
+from advanced_alchemy.extensions.litestar import EngineConfig
 from litestar.contrib.sqlalchemy.plugins import SQLAlchemyAsyncConfig
 from sqlalchemy.orm import DeclarativeBase
 

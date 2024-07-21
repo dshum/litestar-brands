@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+current_path = Path(__file__).parent.parent.resolve()
+sys.path.append(str(current_path))
 
 from app.db import models

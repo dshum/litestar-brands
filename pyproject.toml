@@ -12,11 +12,22 @@ dependencies = [
     "black>=24.4.2",
     "sshtunnel>=0.4.0",
     "advanced-alchemy>=0.17.2",
+    "mypy>=1.11.0",
 ]
 requires-python = "==3.12.*"
 readme = "README.md"
 license = { text = "MIT" }
 
+
+[tool.mypy]
+disallow_any_generics = false
+strict = true
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = [
+    "sshtunnel.*",
+]
 
 [tool.pdm]
 distribution = false
