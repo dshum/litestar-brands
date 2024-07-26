@@ -6,6 +6,7 @@ from litestar.params import Parameter
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.config.rate_limit import rate_limit_config
 from app.config.stores import redis_store
 from app.db.models import Brand
 from app.db.models.remote_brand import RemoteBrand
@@ -62,7 +63,7 @@ class BrandController(Controller):
 
         return list(sorted(params))
 
-    @post("/refresh", return_dto=BrandDTO)
+    @post("/refresh", return_dto=BrandDTO, middleware=[rate_limit_config.middleware])
     async def refresh(
             self,
             remote_brand_service: RemoteBrandService,
@@ -76,7 +77,7 @@ class BrandController(Controller):
         await redis_store.delete_all()
         return {"result": "refreshed"}
 
-    @get("/remote", return_dto=RemoteBrandDTO)
+    @get("/remote", return_dto=RemoteBrandDTO, middleware=[rate_limit_config.middleware])
     async def remote(
             self,
             remote_brand_service: RemoteBrandService,

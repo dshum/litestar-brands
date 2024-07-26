@@ -6,5 +6,5 @@ from app.config import settings
 
 
 def token_guard(connection: ASGIConnection, route_handler: BaseRouteHandler) -> None:
-    if connection.headers.get("Authorization", "") != f"Bearer {settings.app.secret}":
+    if connection.headers.get("Authorization", "") != f"Bearer {settings.app.SECRET}":
         raise NotAuthorizedException("Invalid token")

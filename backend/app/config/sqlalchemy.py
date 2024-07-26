@@ -14,10 +14,10 @@ class DefaultUUIDAuditBase(CommonTableAttributes, AuditColumns, DeclarativeBase)
 
 
 sqlalchemy_config = SQLAlchemyAsyncConfig(
-    connection_string=settings.db.url,
+    connection_string=settings.db.URL,
     metadata=default_registry.metadata,
     session_config=AsyncSessionConfig(expire_on_commit=False),
-    engine_config=EngineConfig(echo=settings.db.echo),
+    engine_config=EngineConfig(echo=settings.db.ECHO),
     before_send_handler="autocommit",
     create_all=True,
 )
