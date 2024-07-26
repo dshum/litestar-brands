@@ -1,13 +1,12 @@
 import {json, type RequestHandler} from "@sveltejs/kit"
-import {API_URL} from "$env/static/private"
+import {API_SECRET, API_URL} from "$env/static/private"
 
-export const GET: RequestHandler = async ({setHeaders}) => {
-  const URL = `${API_URL}/brands/settings`
-
-  const response = await fetch(URL)
+export const GET: RequestHandler = async ({fetch}) => {
+  const url = `${API_URL}/brands/settings`
+  const response = await fetch(url, {
+    headers: {"Authorization": `Bearer ${API_SECRET}`},
+  })
   const data = await response.json()
-
-  setHeaders({"cache-control": "max-age=300"})
 
   return json(data)
 }

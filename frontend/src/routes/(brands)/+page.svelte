@@ -1,15 +1,15 @@
 <script lang="ts">
-	import {fly} from "svelte/transition"
-	import type {PageData} from "./$types"
-	import Hosts from "$lib/components/Hosts.svelte"
-	import Status from "$lib/components/Status.svelte"
-	import type {Brand} from "$lib/types/brand"
-	import {Status as BrandStatus} from "$lib/types/status"
-	import {Version} from "$lib/types/version"
-	import ExtraParams from "$lib/components/ExtraParams.svelte"
+  import {fly} from "svelte/transition"
+  import type {PageData} from "./$types"
+  import Hosts from "$lib/components/Hosts.svelte"
+  import Status from "$lib/components/Status.svelte"
+  import type {Brand} from "$lib/types/brand"
+  import {Status as BrandStatus} from "$lib/types/status"
+  import {Version} from "$lib/types/version"
+  import ExtraParams from "$lib/components/ExtraParams.svelte"
 
 
-	export let data: PageData
+  export let data: PageData
 
   const statuses = Object.entries(BrandStatus)
   const versions = Object.entries(Version)
@@ -28,6 +28,7 @@
   }).filter((brand: Brand) => {
     return search.trim() === ""
       || brand.name.toLowerCase().includes(search.trim().toLowerCase())
+      || brand.hosts.toLowerCase().includes(search.trim().toLowerCase())
       || brand.db_name.toLowerCase().includes(search.trim().toLowerCase())
   })
 

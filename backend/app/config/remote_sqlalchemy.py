@@ -13,6 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import DeclarativeBase
 
 from app.config import settings
+from app.config.logging import logger
 from app.lib.ssh import server
 
 ssh_registry = create_registry()
@@ -25,9 +26,9 @@ class RemoteUUIDAuditBase(CommonTableAttributes, AuditColumns, DeclarativeBase):
 class RemoteSQLAlchemyAsyncConfig(SQLAlchemyAsyncConfig):
     def provide_session(self, state: State, scope: Scope) -> AsyncSession:
         if not server.is_alive:
-            print("Remote server not alive")
+            logger.info("Remote server not alive")
             server.start()
-            print("Remote server connected")
+            logger.info("Remote server connected")
         return super().provide_session(state, scope)
 
 
@@ -40,9 +41,9 @@ def remote_handler_maker(
             await session.close()
             delete_aa_scope_state(scope, session_scope_key)
         if server.is_alive:
-            print("Remote server is alive")
+            logger.info("Remote server is alive")
             server.stop()
-            print("Remote server disconnected")
+            logger.info("Remote server disconnected")
 
     return handler
 
@@ -50,10 +51,10 @@ def remote_handler_maker(
 remote_before_send_handler = remote_handler_maker()
 
 remote_sqlalchemy_config = RemoteSQLAlchemyAsyncConfig(
-    connection_string=settings.db.remote_url,
+    connection_string=settings.db.REMOTE_URL,
     metadata=ssh_registry.metadata,
     session_config=AsyncSessionConfig(expire_on_commit=False),
-    engine_config=EngineConfig(echo=settings.db.echo),
+    engine_config=EngineConfig(echo=True),
     session_dependency_key="remote_db_session",
     engine_dependency_key="remote_db_engine",
     before_send_handler=remote_before_send_handler,
