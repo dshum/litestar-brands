@@ -54,7 +54,7 @@ remote_sqlalchemy_config = RemoteSQLAlchemyAsyncConfig(
     connection_string=settings.db.REMOTE_URL,
     metadata=ssh_registry.metadata,
     session_config=AsyncSessionConfig(expire_on_commit=False),
-    engine_config=EngineConfig(echo=True),
+    engine_config=EngineConfig(echo=settings.db.ECHO),
     session_dependency_key="remote_db_session",
     engine_dependency_key="remote_db_engine",
     before_send_handler=remote_before_send_handler,

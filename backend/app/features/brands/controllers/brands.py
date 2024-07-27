@@ -81,7 +81,6 @@ class BrandController(Controller):
     async def remote(
             self,
             remote_brand_service: RemoteBrandService,
-            brand_service: BrandService,
     ) -> Sequence[RemoteBrand]:
         statement = (select(RemoteBrand)
                      .order_by(RemoteBrand.name.asc()))

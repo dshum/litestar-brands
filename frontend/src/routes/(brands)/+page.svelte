@@ -14,8 +14,8 @@
   const statuses = Object.entries(BrandStatus)
   const versions = Object.entries(Version)
 
-  let selectedStatus: string = "Active"
-  let selectedVersion: string = "crm2"
+  let selectedStatus: string = ""
+  let selectedVersion: string = ""
   let selectedParam: string = ""
   let selectedParams: string[] = []
   let removeParam: string = ""
