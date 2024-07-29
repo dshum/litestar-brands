@@ -27,7 +27,6 @@ class RemoteUUIDAuditBase(CommonTableAttributes, AuditColumns, DeclarativeBase):
 class RemoteSQLAlchemyAsyncConfig(SQLAlchemyAsyncConfig):
     def provide_session(self, state: State, scope: Scope) -> AsyncSession:
         if not server.is_alive:
-            logger.info("Remote server not alive")
             server.start()
             logger.info("Remote server connected")
         return super().provide_session(state, scope)
@@ -49,9 +48,10 @@ def remote_handler_maker(
         session = cast("AsyncSession | None", get_aa_scope_state(scope, session_scope_key))
         if session and message["type"] in SESSION_TERMINUS_ASGI_EVENTS:
             await session.close()
+            logger.info("Remote session closed")
             delete_aa_scope_state(scope, session_scope_key)
+
             if server.is_alive:
-                logger.info("Remote server is alive")
                 server.stop()
                 logger.info("Remote server disconnected")
 

@@ -1,7 +1,7 @@
 from litestar import Litestar, get
 from litestar.exceptions import TooManyRequestsException
 
-from app.config import sentry, settings
+from app.config import sentry
 from app.config.cache import cache_config
 from app.config.openapi import openapi_config
 from app.config.stores import redis_store
@@ -28,7 +28,7 @@ def create_app() -> Litestar:
         exception_handlers={
             TooManyRequestsException: too_many_requests_exception_handler,
         },
-        debug=settings.app.DEBUG,
+        debug=True,
     )
 
 

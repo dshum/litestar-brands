@@ -46,6 +46,7 @@ class DatabaseSettings(BaseSettings):
 
     URL: str
     REMOTE_URL: str
+    BACKGROUND_REMOTE_URL: str
     TEST_REMOTE_URL: str
     ECHO: bool = False
 

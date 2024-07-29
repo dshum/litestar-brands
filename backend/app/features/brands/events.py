@@ -9,7 +9,7 @@ from app.config.logging import logger
 from app.config.stores import redis_store
 from app.db.models import RemoteBrand
 from app.features.brands.services import RemoteBrandService, BrandService
-from app.lib.ssh import server
+from app.lib.ssh import background_server
 from app.server.plugins import channels
 
 
@@ -27,15 +27,15 @@ async def refresh_brands() -> None:
 
 
 async def get_remote_brands() -> Sequence[RemoteBrand]:
-    remote_engine = create_async_engine(url=settings.db.REMOTE_URL, pool_pre_ping=True)
+    remote_engine = create_async_engine(url=settings.db.BACKGROUND_REMOTE_URL, pool_pre_ping=True)
     remote_async_session = async_sessionmaker(remote_engine, expire_on_commit=False)
 
-    if not server.is_alive:
-        server.start()
-        logger.info("Remote server connected")
+    if not background_server.is_alive:
+        background_server.start()
+        logger.info("Remote background server connected")
 
     async with remote_async_session() as session:
-        logger.info("Remote session opened")
+        logger.info("Remote background session opened")
 
         remote_brand_service = RemoteBrandService(session=session)
         statement = (select(RemoteBrand)
@@ -44,11 +44,11 @@ async def get_remote_brands() -> Sequence[RemoteBrand]:
         logger.info("Remote brands received")
 
         await session.close()
-        logger.info("Remote session closed")
+        logger.info("Remote background session closed")
 
-    if server.is_alive:
-        server.stop()
-        logger.info("Remote server disconnected")
+    if background_server.is_alive:
+        background_server.stop()
+        logger.info("Remote background server disconnected")
 
     return remote_brands
 
@@ -60,13 +60,13 @@ async def update_local_brands(remote_brands: Sequence[RemoteBrand]):
     local_async_session = async_sessionmaker(local_engine, expire_on_commit=False)
 
     async with local_async_session() as session:
-        logger.info("Local session opened")
+        logger.info("Local background session opened")
 
         brand_service = BrandService(session=session)
         await brand_service.upsert_many(data=data, match_fields=["name"], auto_commit=True)
         logger.info("Local brands refreshed")
         await session.close()
-        logger.info("Local session closed")
+        logger.info("Local background session closed")
 
         await redis_store.delete_all()
         logger.info("Redis cache cleaned")
