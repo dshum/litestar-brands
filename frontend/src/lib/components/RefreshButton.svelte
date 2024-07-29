@@ -12,14 +12,14 @@
 
     await fetch("/api/brands/refresh", {method: "POST"})
       .then(response => response.json())
-      .then(async ({status_code}) => {
+      .then(async ({status_code, detail}) => {
         if (status_code > 299) {
-          onRefreshError(status_code)
+          onRefreshError(status_code, detail)
         } else {
           await onRefreshSuccess()
         }
       }).catch(() => {
-        onRefreshError(500)
+        onRefreshError(500, "Something went wrong")
       }).finally(() => {
         button.disabled = false
       })
@@ -29,14 +29,11 @@
     toast("Brand updates added to the queue", "tertiary")
   }
 
-  const onRefreshError = (status_code: number) => {
-    switch (status_code) {
-      case 429:
-        toast("Too many requests. Try again in 1 minute", "warning")
-        break
-      default:
-        toast("Something went wrong", "error")
-        break
+  const onRefreshError = (status_code: number, detail: string) => {
+    if (status_code < 500) {
+      toast(detail, "warning")
+    } else {
+      toast(detail, "error")
     }
   }
 
@@ -56,8 +53,12 @@
       const data = JSON.parse(event.data)
 
       if (data.message) {
-        await invalidate("/api/brands")
-        toast(data.message, "success")
+        if (data.status === "error") {
+          toast(data.message, "error")
+        } else {
+          await invalidate("/api/brands")
+          toast(data.message, "success")
+        }
       }
     }
   })

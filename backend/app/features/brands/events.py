@@ -19,9 +19,11 @@ async def refresh_brands() -> None:
     try:
         remote_brands = await get_remote_brands()
         await update_local_brands(remote_brands)
-        channels.publish({"message": "Brands have been updated"}, "brands")
-    except Exception as err:
-        logger.error("Error while refreshing brands", error=err)
+        channels.publish({"status": "success", "message": "Brands have been successfully updated"}, "brands")
+    except Exception as error:
+        channels.publish({"status": "error", "message": "Error while refreshing brands"}, "brands")
+        logger.error("Error while refreshing brands", error=error)
+        raise error
 
 
 async def get_remote_brands() -> Sequence[RemoteBrand]:
