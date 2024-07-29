@@ -1,6 +1,6 @@
 from typing import Sequence
 
-from litestar import Controller, get, post
+from litestar import Controller, get, post, Request
 from litestar.di import Provide
 from litestar.params import Parameter
 from sqlalchemy import select
@@ -63,7 +63,7 @@ class BrandController(Controller):
 
         return list(sorted(params))
 
-    @post("/refresh", return_dto=BrandDTO, middleware=[rate_limit_config.middleware])
+    @post("/refresh", middleware=[rate_limit_config.middleware])
     async def refresh(
             self,
             remote_brand_service: RemoteBrandService,
@@ -76,6 +76,14 @@ class BrandController(Controller):
         await brand_service.upsert_many(data=data, match_fields=["name"])
         await redis_store.delete_all()
         return {"result": "refreshed"}
+
+    @post("/refresh/queue", middleware=[rate_limit_config.middleware])
+    async def queue_refresh(
+            self,
+            request: Request,
+    ) -> dict[str, str]:
+        request.app.emit("refresh_brands")
+        return {"result": "queued"}
 
     @get("/remote", return_dto=RemoteBrandDTO, middleware=[rate_limit_config.middleware])
     async def remote(

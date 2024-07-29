@@ -3,9 +3,10 @@ from typing import Coroutine, Callable, Any, cast
 from advanced_alchemy.base import create_registry, CommonTableAttributes, AuditColumns
 from advanced_alchemy.config import AsyncSessionConfig
 from advanced_alchemy.extensions.litestar import EngineConfig
-from advanced_alchemy.extensions.litestar._utils import get_aa_scope_state, delete_aa_scope_state
-from advanced_alchemy.extensions.litestar.plugins.init.config.common import SESSION_SCOPE_KEY, \
-    SESSION_TERMINUS_ASGI_EVENTS
+from advanced_alchemy.extensions.litestar.plugins.init.config.common import (
+    SESSION_SCOPE_KEY,
+    SESSION_TERMINUS_ASGI_EVENTS,
+)
 from litestar.contrib.sqlalchemy.plugins import SQLAlchemyAsyncConfig
 from litestar.datastructures import State
 from litestar.types import Scope, Message
@@ -32,6 +33,15 @@ class RemoteSQLAlchemyAsyncConfig(SQLAlchemyAsyncConfig):
         return super().provide_session(state, scope)
 
 
+def get_aa_scope_state(scope: Scope, key: str, default: Any = None, pop: bool = False) -> Any:
+    namespace = scope.setdefault("_aa_connection_state", {})
+    return namespace.pop(key, default) if pop else namespace.get(key, default)
+
+
+def delete_aa_scope_state(scope: Scope, key: str) -> None:
+    del scope.setdefault("_aa_connection_state", {})[key]
+
+
 def remote_handler_maker(
         session_scope_key: str = SESSION_SCOPE_KEY,
 ) -> Callable[[Message, Scope], Coroutine[Any, Any, None]]:
@@ -40,10 +50,10 @@ def remote_handler_maker(
         if session and message["type"] in SESSION_TERMINUS_ASGI_EVENTS:
             await session.close()
             delete_aa_scope_state(scope, session_scope_key)
-        if server.is_alive:
-            logger.info("Remote server is alive")
-            server.stop()
-            logger.info("Remote server disconnected")
+            if server.is_alive:
+                logger.info("Remote server is alive")
+                server.stop()
+                logger.info("Remote server disconnected")
 
     return handler
 
