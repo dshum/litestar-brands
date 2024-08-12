@@ -7,16 +7,14 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config.rate_limit import rate_limit_config
-from app.config.stores import redis_store
 from app.db.models import Brand
-from app.db.models.remote_brand import RemoteBrand
 from app.db.models.status import Status
 from app.features.brands.dependencies import (
     provide_brand_service,
     provide_remote_brand_service,
 )
-from app.features.brands.dtos import BrandDTO, RemoteBrandDTO
-from app.features.brands.services import BrandService, RemoteBrandService
+from app.features.brands.dtos import BrandDTO
+from app.features.brands.services import BrandService
 
 
 class BrandController(Controller):
@@ -63,6 +61,15 @@ class BrandController(Controller):
 
         return list(sorted(params))
 
+    @post("/refresh/queue", middleware=[rate_limit_config.middleware])
+    async def queue_refresh(
+            self,
+            request: Request,
+    ) -> dict[str, str]:
+        request.app.emit("refresh_brands")
+        return {"result": "queued"}
+
+    """
     @post("/refresh", middleware=[rate_limit_config.middleware])
     async def refresh(
             self,
@@ -77,13 +84,7 @@ class BrandController(Controller):
         await redis_store.delete_all()
         return {"result": "refreshed"}
 
-    @post("/refresh/queue", middleware=[rate_limit_config.middleware])
-    async def queue_refresh(
-            self,
-            request: Request,
-    ) -> dict[str, str]:
-        request.app.emit("refresh_brands")
-        return {"result": "queued"}
+    
 
     @get("/remote", return_dto=RemoteBrandDTO, middleware=[rate_limit_config.middleware])
     async def remote(
@@ -93,3 +94,4 @@ class BrandController(Controller):
         statement = (select(RemoteBrand)
                      .order_by(RemoteBrand.name.asc()))
         return await remote_brand_service.list(statement=statement)
+    """

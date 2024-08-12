@@ -6,7 +6,7 @@
 
   initializeStores()
   storePopup.set({computePosition, autoUpdate, flip, shift, offset, arrow})
-  
+
   export let data
 
   const user = data.user

@@ -10,19 +10,21 @@
     const button = event.currentTarget
     button.disabled = true
 
-    await fetch("/api/brands/refresh", {method: "POST"})
-      .then(response => response.json())
-      .then(async ({status_code, detail}) => {
-        if (status_code > 299) {
-          onRefreshError(status_code, detail)
-        } else {
-          await onRefreshSuccess()
-        }
-      }).catch(() => {
-        onRefreshError(500, "Something went wrong")
-      }).finally(() => {
-        button.disabled = false
-      })
+    try {
+      const response = await fetch("/api/brands/refresh", {method: "POST"})
+      const data = await response.json()
+      if (response.status > 299) {
+        onRefreshError(response.status, data.message)
+      } else if (data.status_code > 299) {
+        onRefreshError(data.status_code, data.detail)
+      } else {
+        await onRefreshSuccess()
+      }
+    } catch {
+      onRefreshError(500, "Something went wrong")
+    } finally {
+      button.disabled = false
+    }
   }
 
   const onRefreshSuccess = async () => {

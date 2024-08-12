@@ -1,11 +1,24 @@
 <script lang="ts">
-	import {fly} from "svelte/transition"
-	import type {PageData} from "./$types"
-	import type {Brand} from "$lib/types/brand"
-	import Status from "$lib/components/Status.svelte"
-	import Hosts from "$lib/components/Hosts.svelte"
+  import {fly} from "svelte/transition"
+  import type {PageData} from "./$types"
+  import type {Brand} from "$lib/types/brand"
+  import Status from "$lib/components/Status.svelte"
+  import Hosts from "$lib/components/Hosts.svelte"
+  import {error} from "@sveltejs/kit"
 
-	export let data: PageData
+  export let data: PageData
+
+  if (data.brand.status_code === 404) {
+    error(404, {
+      code: 404,
+      message: "Brand not found",
+    })
+  } else if (data.brand.message) {
+    error(500, {
+      code: 500,
+      message: "Cannot load brand",
+    })
+  }
 
   const brand: Brand = data.brand
   const createdAt: Date = new Date(brand.created_at)

@@ -7,9 +7,17 @@
   import {Status as BrandStatus} from "$lib/types/status"
   import {Version} from "$lib/types/version"
   import ExtraParams from "$lib/components/ExtraParams.svelte"
+  import {error} from "@sveltejs/kit"
 
 
   export let data: PageData
+
+  if (data.brands.message) {
+    error(500, {
+      code: 500,
+      message: "Cannot load brands",
+    })
+  }
 
   const statuses = Object.entries(BrandStatus)
   const versions = Object.entries(Version)

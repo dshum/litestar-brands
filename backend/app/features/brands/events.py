@@ -9,7 +9,7 @@ from app.config.logging import logger
 from app.config.stores import redis_store
 from app.db.models import RemoteBrand
 from app.features.brands.services import RemoteBrandService, BrandService
-from app.lib.ssh import background_server
+from app.lib.ssh import server
 from app.server.plugins import channels
 
 
@@ -27,11 +27,11 @@ async def refresh_brands() -> None:
 
 
 async def get_remote_brands() -> Sequence[RemoteBrand]:
-    remote_engine = create_async_engine(url=settings.db.BACKGROUND_REMOTE_URL, pool_pre_ping=True)
+    remote_engine = create_async_engine(url=settings.db.REMOTE_URL, pool_pre_ping=True)
     remote_async_session = async_sessionmaker(remote_engine, expire_on_commit=False)
 
-    if not background_server.is_alive:
-        background_server.start()
+    if not server.is_alive:
+        server.start()
         logger.info("Remote background server connected")
 
     async with remote_async_session() as session:
@@ -46,8 +46,8 @@ async def get_remote_brands() -> Sequence[RemoteBrand]:
         await session.close()
         logger.info("Remote background session closed")
 
-    if background_server.is_alive:
-        background_server.stop()
+    if server.is_alive:
+        server.stop()
         logger.info("Remote background server disconnected")
 
     return remote_brands
