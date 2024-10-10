@@ -8,6 +8,7 @@
   import {Version} from "$lib/types/version"
   import ExtraParams from "$lib/components/ExtraParams.svelte"
   import {error} from "@sveltejs/kit"
+  import Date from "$lib/components/Date.svelte"
 
 
   export let data: PageData
@@ -19,11 +20,11 @@
     })
   }
 
-  const statuses = Object.entries(BrandStatus)
-  const versions = Object.entries(Version)
+  const statuses = Object.values(BrandStatus)
+  const versions = Object.values(Version)
 
-  let selectedStatus: string = ""
-  let selectedVersion: string = ""
+  let selectedStatus: string = BrandStatus.Active
+  let selectedVersion: string = Version.crm2
   let selectedParam: string = ""
   let selectedParams: string[] = []
   let removeParam: string = ""
@@ -32,7 +33,9 @@
   $: filteredBrands = data.brands.filter((brand: Brand) => {
     return selectedStatus ? brand.status === selectedStatus : true
   }).filter((brand: Brand) => {
-    return selectedVersion ? brand.hosts.includes(selectedVersion + ".") : true
+    return selectedVersion
+      ? brand.hosts.toLowerCase().includes(selectedVersion.toLowerCase() + ".")
+      : true
   }).filter((brand: Brand) => {
     return search.trim() === ""
       || brand.name.toLowerCase().includes(search.trim().toLowerCase())
@@ -71,7 +74,7 @@
     <select bind:value={selectedStatus} class="select">
       <option value="">All statuses</option>
       {#each statuses as status}
-        <option class="max-w-sm" value="{status[0]}">{status[1]}</option>
+        <option selected={status === selectedStatus}>{status}</option>
       {/each}
     </select>
   </div>
@@ -80,7 +83,7 @@
     <select bind:value={selectedVersion} class="select">
       <option value="">All versions</option>
       {#each versions as version}
-        <option class="max-w-sm" value="{version[0]}">{version[1]}</option>
+        <option selected={version === selectedVersion}>{version}</option>
       {/each}
     </select>
   </div>
@@ -93,7 +96,7 @@
     <select bind:value={selectedParam} class="select">
       <option value="">Add BM variable</option>
       {#each data.settings as param}
-        <option value="{param}">{param}</option>
+        <option value={param}>{param}</option>
       {/each}
     </select>
   </div>
@@ -107,6 +110,7 @@
       <th class="w-1/3">Hosts</th>
       <th class="w-1/12">DB name</th>
       <th class="w-1/12 text-right">Status</th>
+      <th class="w-1/12">Created at</th>
       {#if selectedParams.length}
         <th class="w-1/3">Settings</th>
       {/if}
@@ -126,6 +130,9 @@
           <td>{brand.db_name}</td>
           <td class="text-right">
             <Status bind:status={brand.status}/>
+          </td>
+          <td>
+            <Date bind:data={brand.created_at}/>
           </td>
           {#if selectedParams.length}
             <td class="p-2 break-all">

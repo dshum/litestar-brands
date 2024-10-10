@@ -3,13 +3,14 @@
   import {initializeStores, LightSwitch, storePopup, Toast} from "@skeletonlabs/skeleton"
   import {arrow, autoUpdate, computePosition, flip, offset, shift} from "@floating-ui/dom"
   import RefreshButton from "$lib/components/RefreshButton.svelte"
+  import {enhance} from "$app/forms"
 
   initializeStores()
   storePopup.set({computePosition, autoUpdate, flip, shift, offset, arrow})
 
   export let data
 
-  const user = data.user
+  $: user = data.user
 </script>
 
 <Toast/>
@@ -32,7 +33,7 @@
         {#if user}
           <RefreshButton/>
 
-          <form action="/logout" method="POST">
+          <form action="/logout" method="POST" use:enhance>
             <button class="btn btn-sm variant-filled-surface">
 								<span><svg class="w-[16px] h-[16px]" aria-hidden="true"
                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">

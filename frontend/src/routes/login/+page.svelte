@@ -1,43 +1,44 @@
 <script lang="ts">
-	import type { ActionData } from "./$types"
+  import type {ActionData} from "./$types"
+  import {enhance} from "$app/forms"
 
-	export let form: ActionData
+  export let form: ActionData
 </script>
 
 <div class="my-6 flex flex-row justify-center m-auto">
-	<div class="flex flex-col min-w-72 justify-center gap-4">
-		<h1 class="h1">Log in</h1>
+  <div class="flex flex-col min-w-72 justify-center gap-4">
+    <h1 class="h1">Log in</h1>
 
-		{#if form?.missing}
-			<p class="error">The email field is required</p>
-		{/if}
+    {#if form?.missing}
+      <p class="error">The email field is required</p>
+    {/if}
 
-		{#if form?.incorrect}
-			<p class="error">Invalid credentials!</p>
-		{/if}
+    {#if form?.incorrect}
+      <p class="error">Invalid credentials!</p>
+    {/if}
 
-		<form method="POST">
-			<div class="flex flex-col gap-4">
-				<label class="label">
-					<span>Email</span>
-					<input name="email" type="email" value={form?.email ?? ""} class="input"
-								 autocomplete="on"
-					>
-				</label>
+    <form method="POST" use:enhance>
+      <div class="flex flex-col gap-4">
+        <label class="label">
+          <span>Email</span>
+          <input name="email" type="email" value={form?.email ?? ""} class="input"
+                 autocomplete="username"
+          >
+        </label>
 
-				<label class="label">
-					<span>Password</span>
-					<input name="password" type="password" class="input"
-								 autocomplete="current-password"
-					>
-				</label>
+        <label class="label">
+          <span>Password</span>
+          <input name="password" type="password" class="input"
+                 autocomplete="current-password"
+          >
+        </label>
 
-				<label>
-					<button>Log in</button>
-				</label>
-			</div>
-		</form>
-	</div>
+        <label>
+          <button>Log in</button>
+        </label>
+      </div>
+    </form>
+  </div>
 </div>
 
 <style lang="postcss">
